@@ -43,19 +43,15 @@ class Contact
   # 1. which of the contact's attributes you want to update
   # 2. the new value for that attribute
   # and then make the appropriate change to the contact
-  def update(attribute_to_update)
-    if attribute_to_update == 'First Name'
-      #update First Name
-      @first_name = gets.chomp
-    elsif attribute_to_update == 'Last Name'
-      # update Last name
-      @last_name = gets.chomp
-    elsif attribute_to_update == 'e-mail'
-      # update email
-      @email = gets.chomp
-    elsif attribute_to_update == 'notes'
-      # update notes
-      @notes = gets.chomp
+  def update(attribute_to_update, field_to_update)
+    if attribute_to_update == 1
+      @first_name = field_to_update
+    elsif attribute_to_update == 2
+      @last_name = field_to_update
+    elsif attribute_to_update == 3
+      @email = field_to_update
+    elsif attribute_to_update == 4
+      @notes = field_to_update
     end
   end
 
@@ -63,11 +59,30 @@ class Contact
   # but it should allow you to search for a contact using attributes other than id
   # by specifying both the name of the attribute and the value
   # eg. searching for 'first_name', 'Betty' should return the first contact named Betty
-  def self.find_by(first_name)
+  # def self.find_by(search_by, searched_for)
+  #   @@contacts.each do |contact|
+  #     case search_by
+  #     when 1 then contact.first_name == searched_for
+  #       return contact
+  #     when 2 then contact.last_name == searched_for
+  #       return contact
+  #     when 3 then contact.email == searched_for
+  #       return contact
+  #     when 4 then contact.notes == searched_for
+  #       return contact
+  #     end
+  #   end
+  # end
+  def self.find_by(search_by, searched_for)
     @@contacts.each do |contact|
-      if contact.first_name == first_name
-      # if user_id == @@contacts[id]
-      return contact
+      if search_by == 1 && contact.first_name == searched_for
+        puts contact.inspect
+      elsif search_by == 2 && contact.last_name == searched_for
+        puts contact.inspect
+      elsif search_by == 3 && contact.email == searched_for
+        puts contact.inspect
+      elsif search_by == 4 && contact.note == searched_for
+        puts contact.inspect
       end
     end
   end
@@ -130,17 +145,17 @@ class Contact
 
 end
 
-contact = Contact.create('Betty', 'Maker', 'bettymakes@gmail.com', 'Loves Pokemon')
-contact2 = Contact.create('Mark', 'Frost', 'markfrost@gmail.com', 'Writer')
-puts Contact.all.inspect
-contact.email  = 'bettymakes@google.com'
-contact.note = 'Loves HTML & CSS'
-puts "-"*40
-# puts contact.inspect
-puts Contact.find(101).inspect
-puts "-"*40
-puts Contact.find_by('Betty').inspect
-puts "-"*50
-# puts Contact.delete_all
-puts contact.update('First Name')
-puts Contact.all.inspect
+# contact = Contact.create('Betty', 'Maker', 'bettymakes@gmail.com', 'Loves Pokemon')
+# contact2 = Contact.create('Mark', 'Frost', 'markfrost@gmail.com', 'Writer')
+# puts Contact.all.inspect
+# contact.email  = 'bettymakes@google.com'
+# contact.note = 'Loves HTML & CSS'
+# puts "-"*40
+# # puts contact.inspect
+# puts Contact.find(101).inspect
+# puts "-"*40
+# puts Contact.find_by('Betty').inspect
+# puts "-"*50
+# # puts Contact.delete_all
+# puts contact.update('First Name')
+# puts Contact.all.inspect
