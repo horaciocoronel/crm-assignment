@@ -33,9 +33,6 @@ class CRM
     when 5 then search_by_attribute
     when 6 then exit
     end
-    # Finish off the rest for 3 through 6
-    # To be clear, the methods add_new_contact and modify_existing_contact
-    # haven't been implemented yet
   end
 
   def add_new_contact
@@ -45,15 +42,15 @@ class CRM
     last_name = gets.chomp
     puts "e-mail address:"
     email = gets.chomp
-    puts "Do you want to add any notes for this contact? Yes/No"
-    add_notes = gets.chomp
-      if add_notes == 'Yes' || 'Y'
-        puts "Write your notes below:"
-        notes = gets.chomp
-        Contact.create(first_name, last_name, email, notes)
-      else
-        Contact.create(first_name, last_name, email)
-      end
+    puts "Notes:"
+    note = gets.chomp
+    # Contact.create(first_name, last_name, email, note)
+    contact = Contact.create(
+      first_name: first_name,
+      last_name:  last_name,
+      email:      email,
+      note:       note
+    )
   end
 
   def modify_existing_contact
@@ -66,9 +63,18 @@ class CRM
     puts "1) Name 2) Last Name 3) e-mail 4) notes"
     puts 'Enter a number: '
     attribute_to_update = gets.chomp.to_i
+    if attribute_to_update == 4
+      attribute_to_update = 'note'
+    elsif attribute_to_update == 3
+      attribute_to_update = 'email'
+    elsif attribute_to_update == 2
+      attribute_to_update = 'last_name'
+    elsif attribute_to_update == 1
+      attribute_to_update = 'first_name'
+    end
     puts "What is the new value?"
     new_value = gets.chomp
-    contact.update(attribute_to_update, new_value)
+    contact.update(attribute_to_update.to_sym => new_value)
   end
 
   def delete_contact
@@ -91,15 +97,24 @@ class CRM
     search_by = gets.chomp.to_i
     puts "Enter the value to search for:"
     search_for = gets.chomp
-    Contact.find_by(search_by, search_for)
-        # need to pass two arguments - one for WHAT (email, name, etc) im searching for
-        # and second for whom
-    # puts "W"
-    # id_to_modify = gets.chomp.to_i
+    if search_by == 4
+      search_by = 'note'
+    elsif search_by == 3
+      search_by = 'email'
+    elsif search_by == 2
+      search_by = 'last_name'
+    elsif search_by == 1
+      search_by = 'first_name'
+    end
+    puts Contact.find_by(search_by.to_sym => search_for).inspect
   end
 
 end
-contact1 = Contact.create('Betty', 'Makes', 'bettymakes@gmail.com', 'Cook')
-contact2 = Contact.create('Mark', 'Frost', 'markfrost@gmail.com', 'Writer')
+# contact1 = Contact.create('Betty', 'Makes', 'bettymakes@gmail.com', 'Cook')
+# contact2 = Contact.create('Mark', 'Frost', 'markfrost@gmail.com', 'Writer')
 session1 = CRM.new
-# session1.main_menu
+session1.main_menu
+
+at_exit do
+  ActiveRecord::Base.connection.close
+end
