@@ -1,3 +1,10 @@
+gem 'activerecord', '=4.2.7'
+require 'active_record'
+require 'mini_record'
+
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'crm.sqlite3')
+
+
 class Contact
 
   @@contacts = []
@@ -74,7 +81,7 @@ class Contact
   #   end
   # end
   def self.find_by(search_by, searched_for)
-    @@contacts.each do |contact|
+    @@contacts.each.select do |contact|
       if search_by == 1 && contact.first_name == searched_for
         puts contact.inspect
       elsif search_by == 2 && contact.last_name == searched_for
